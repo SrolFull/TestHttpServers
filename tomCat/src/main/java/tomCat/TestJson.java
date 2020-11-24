@@ -1,9 +1,8 @@
 package tomCat;
 
-import Utility.Employee;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,13 +11,16 @@ import java.io.PrintWriter;
 public class TestJson extends javax.servlet.http.HttpServlet{
     @Override
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        Employee employee = new Employee(1,"Roman","EKB",15000);
-        String employeeJsonString = new Gson().toJson(employee);
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode data = mapper.createObjectNode();
+        data.put("id", 1);
+        data.put("name","Aristov Roman");
+        data.put("city","EKB");
+        data.put("public", true);
+        String json = mapper.writeValueAsString(data);
         PrintWriter out = response.getWriter();
         response.setContentType("application/json;charset=UTF-8");
-        out.print(employeeJsonString);
+        out.print(json);
         out.flush();
-        System.out.print("Something with GSOn by google");
-
     }
 }
