@@ -7,10 +7,30 @@
         <groupId>org.example</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+
+    <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
+    <properties>
+        <tomcat.version>8.5.2</tomcat.version>
+    </properties>
 
     <artifactId>tomCat</artifactId>
     <dependencies>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-logging-juli</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
@@ -24,14 +44,26 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.8.5</version>
-        </dependency>
-        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.11.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jasper</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jasper-el</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jsp-api</artifactId>
+            <version>${tomcat.version}</version>
         </dependency>
 
     </dependencies>
@@ -50,7 +82,7 @@
                         <configuration>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>tomcat.TestJson</mainClass>
+                                    <mainClass>tomcat.launch.Main</mainClass>
                                 </transformer>
                             </transformers>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
@@ -58,8 +90,29 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>appassembler-maven-plugin</artifactId>
+                <version>2.0.0</version>
+                <configuration>
+                    <assembleDirectory>target</assembleDirectory>
+                    <programs>
+                        <program>
+                            <mainClass>tomcat.launch.Main</mainClass>
+                            <name>tomcat</name>
+                        </program>
+                    </programs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>assemble</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
-
-
 </project>
